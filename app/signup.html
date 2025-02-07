@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Study Buddies</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">Study Buddies</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Sign Up Section -->
+  <section class="signup">
+    <div class="signup-container">
+      <h2>Create Your Account</h2>
+      <p>Join Study Buddies and connect with like-minded students.</p>
+      <form action="signup_process.php" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password:</label>
+          <input type="password" id="confirm-password" name="confirm-password" required />
+        </div>
+
+        <div class="form-group">
+          <label for="interests">Study Interests:</label>
+          <input type="text" id="interests" name="interests" placeholder="E.g., Math, Science, Literature" required />
+        </div>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+      </form>
+      <p>Already have an account? <a href="login.html">Log in here</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Study Buddies. All rights reserved.</p>
+  </footer>
+</body>
+</html>
