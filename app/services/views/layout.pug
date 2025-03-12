@@ -1,0 +1,29 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title #{title}
+    link(rel="stylesheet", href="/styles.css")
+  body
+    // Header
+    header
+      .logo Study Buddies
+      nav
+        ul
+          li: a(href="/") Home
+          li: a(href="/how_it_works") How It Works
+          li: a(href="/features") Features
+          li: a(href="/signup") Sign Up
+          li: a(href="/contact" class="active") Contact
+
+    // Main Content
+    block content
+
+    // Footer
+    footer
+      p &copy; 2025 Study Buddies. All rights reserved.
+      ul.social-links
+        li: a(href="#") Facebook
+        li: a(href="#") Twitter
+        li: a(href="#") LinkedIn

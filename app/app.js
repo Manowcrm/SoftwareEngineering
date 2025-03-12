@@ -1,22 +1,24 @@
-// Import express.js
 const express = require("express");
+const path = require("path");
 
 // Create express app
 var app = express();
 
 // Add static files location
-app.use(express.static("static"));
+app.use(express.static(path.join(__dirname, "static")));
 
 // Use the Pug templating engine
 app.set('view engine', 'pug');
-app.set('views', './app/views');
+app.set('views', path.join(__dirname, 'services', 'views'));
+
+console.log("Views directory set to:", path.join(__dirname, 'services', 'views'));
 
 // Get the functions in the db.js file to use
 const db = require('./services/db');
 
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.send("Hello world!");
+    res.render("index", { title: "Home" });
 });
 
 // Create a route for testing the db
@@ -30,24 +32,37 @@ app.get("/db_test", function(req, res) {
 });
 
 // Create a route for /goodbye
-// Responds to a 'GET' request
 app.get("/goodbye", function(req, res) {
     res.send("Goodbye world!");
 });
 
-// Create a dynamic route for /hello/<name>, where name is any value provided by user
-// At the end of the URL
-// Responds to a 'GET' request
+// Create a dynamic route for /hello/<name>
 app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
     console.log(req.params);
-    //  Retrieve the 'name' parameter and use it in a dynamically generated page
     res.send("Hello " + req.params.name);
 });
 
+// Create a route for /signup
+app.get("/signup", function(req, res) {
+    res.render("signup", { title: "Sign Up" });
+});
+
+// Create a route for /contact
+app.get("/contact", function(req, res) {
+    res.render("contact", { title: "Contact" });
+});
+
+// Create a route for /features
+app.get("/features", function(req, res) {
+    res.render("features", { title: "Features" });
+});
+
+// Create a route for /how_it_works
+app.get("/how_it_works", function(req, res) {
+    res.render("how_it_works", { title: "How It Works" });
+});
 
 // Start server on port 3000
-app.listen(3000,function(){
+app.listen(3000, function() {
     console.log(`Server running at http://127.0.0.1:3000/`);
 });

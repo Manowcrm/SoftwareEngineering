@@ -1,0 +1,46 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Sign Up - Study Buddies
+    link(rel="stylesheet", href="/styles.css")
+  body
+    // Header
+    header
+      .logo Study Buddies
+      nav
+        ul
+          li: a(href="/") Home
+          li: a(href="#") How It Works
+          li: a(href="#") Features
+          li: a(href="#") Contact
+
+    // Sign Up Section
+    section.signup
+      .signup-container
+        h2 Create Your Account
+        p Join Study Buddies and connect with like-minded students.
+        form(action="/signup_process", method="POST")
+          .form-group
+            label(for="name") Full Name:
+            input(type="text", id="name", name="name", required)
+          .form-group
+            label(for="email") Email:
+            input(type="email", id="email", name="email", required)
+          .form-group
+            label(for="password") Password:
+            input(type="password", id="password", name="password", required)
+          .form-group
+            label(for="confirm-password") Confirm Password:
+            input(type="password", id="confirm-password", name="confirm-password", required)
+          .form-group
+            label(for="interests") Study Interests:
+            input(type="text", id="interests", name="interests", placeholder="E.g., Math, Science, Literature", required)
+          button(type="submit", class="signup-btn") Sign Up
+        p Already have an account? 
+          a(href="/login") Log in here
+
+    // Footer
+    footer
+      p &copy; 2025 Study Buddies. All rights reserved.

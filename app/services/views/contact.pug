@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  // Contact Section
+  section#contact
+    .contact-container
+      h2 Contact Us
+      p Have questions? Reach out to us below.
+      form(action="/contact_process", method="POST")
+        .form-group
+          input(type="text", name="name", placeholder="Your Name", required)
+        .form-group
+          input(type="email", name="email", placeholder="Your Email", required)
+        .form-group
+          textarea(name="message", placeholder="Your Message", rows="5", required)
+        button(type="submit", class="contact-btn") Send Message
