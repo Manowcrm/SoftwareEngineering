@@ -1,0 +1,94 @@
+/* Make the active nav link stand out */
+nav ul li a.active {
+    color: #28a745;
+    font-weight: bold;
+}
+
+/* Contact Section Styling */
+#contact {
+    text-align: center;
+    padding: 60px 30px;
+    background: #fff;
+    border-radius: 15px;
+    margin: 40px auto;
+    max-width: 700px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Form container styling */
+#contact form {
+    display: grid;
+    gap: 20px;
+    max-width: 100%;
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
+}
+
+/* Make input and textarea full width for mobile */
+@media (max-width: 768px) {
+    #contact form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Input and Textarea Styling */
+#contact input, #contact textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 0;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f7f7f7;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Focus Effect */
+#contact input:focus, #contact textarea:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+    outline: none;
+}
+
+/* Placeholder Text Styling */
+#contact input::placeholder, #contact textarea::placeholder {
+    color: #6c757d;
+}
+
+/* Button Styling */
+#contact button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    margin-top: 15px;
+    grid-column: span 2;
+}
+
+/* Button Hover Effect */
+#contact button:hover {
+    background: #218838;
+    transform: translateY(-3px);
+}
+
+/* Button Active Effect */
+#contact button:active {
+    background: #1e7e34;
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #contact {
+        padding: 50px 20px;
+    }
+
+    #contact button {
+        grid-column: span 1;
+    }
+}
