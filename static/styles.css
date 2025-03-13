@@ -183,3 +183,8 @@ footer .social-links li a {
   color: white;
   text-decoration: none;
 }
+
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+}
