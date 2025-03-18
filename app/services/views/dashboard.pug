@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .dashboard-container
+    .sidebar
+      ul
+        li: a(href="/profile") Profile
+        li: a(href="/settings") Settings
+        li: a(href="/activity") Activity
+        li: a(href="/logout") Logout
+    .main-content
+      h2 Welcome back, #{name}!
+      p We're glad to see you here.
+      
+      .stats
+        h3 Your Dashboard Stats
+        ul
+          li Total Posts: 10
+          li Messages: 5
+          li Notifications: 3
+      
+      .activity
+        h3 Recent Activity
+        ul
+          li You logged in 10 minutes ago.
+          li You updated your profile.
+          li You received a new message.

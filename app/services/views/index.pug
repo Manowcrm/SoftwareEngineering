@@ -1,29 +1,35 @@
 extends layout
 
 block content
-  // Main Content
   main
-    .hero
+    // Hero Section
+    section.hero#hero
       .hero-content
         h1 Connect. Collaborate. Succeed.
         p Find your perfect study buddy and boost your academic success.
-        a.btn(href="/signup") Get started
-    .features
+        .btn-group
+          a.btn(href="/signup") Get Started
+          a.btn-secondary(href="/login")
+            i.fas.fa-sign-in-alt
+            |  Log In
+
+    // Features Section
+    section.features#features
       h2 Our Features
       .feature-grid
         .feature
-          img(src="/images/create_profile.png" alt="Create Profile")
+          i.fas.fa-user-graduate
           h3 Create Profile
-          p Set up your profile with your academic interests and study preferences.
+          p Set up your profile with your academic interests.
         .feature
-          img(src="/images/buddy_matching.png"  alt="Buddy Matching")
+          i.fas.fa-handshake
           h3 Buddy Matching
-          p Find peers based on shared courses and study habits.
+          p Discover peers based on shared courses.
         .feature
-          img(src="/images/chat_messaging.png" alt="Chat & Messaging")
+          i.fas.fa-comments
           h3 Chat & Messaging
-          p Communicate with your study buddies easily.
+          p Communicate with your study buddies.
         .feature
-          img(src="/images/schedule_sessions.png" alt="Schedule Sessions")
+          i.fas.fa-calendar-alt
           h3 Schedule Sessions
-          p Organize study sessions with your peers.
+          p Organize study sessions with ease.

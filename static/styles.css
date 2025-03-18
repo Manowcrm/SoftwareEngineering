@@ -1,115 +1,200 @@
+/* -------------------------------------------------------
+   Global Styles
+-------------------------------------------------------- */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #f4f4f4;
   margin: 0;
   padding: 0;
+  color: #333;
 }
 
+/* -------------------------------------------------------
+   Header
+-------------------------------------------------------- */
 header {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 0;
+  padding: 15px 0;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 header .logo {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 
 header nav ul {
   list-style: none;
   padding: 0;
+  margin: 10px 0 0;
 }
 
 header nav ul li {
-  display: inline;
-  margin: 0 10px;
+  display: inline-block;
+  margin: 0 15px;
 }
 
 header nav ul li a {
   color: white;
   text-decoration: none;
+  font-size: 16px;
 }
 
-header nav ul li a.active {
+header nav ul li a.active,
+header nav ul li a:hover {
   font-weight: bold;
 }
 
+/* -------------------------------------------------------
+   Hero Section
+-------------------------------------------------------- */
 .hero {
+  position: relative;
   background: url('/images/intro.jpg') no-repeat center center/cover;
-  color: white;
-  padding: 100px 0;
-  text-align: center;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
 }
 
 .hero-content {
-  background-color: rgba(0, 0, 0, 0.5);
-  display: inline-block;
+  position: relative;
+  text-align: center;
+  max-width: 600px;
   padding: 20px;
+  color: white;
 }
 
 .hero-content h1 {
   font-size: 48px;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 .hero-content p {
-  font-size: 24px;
-  margin: 10px 0;
+  font-size: 20px;
+  margin-bottom: 30px;
+  line-height: 1.4;
 }
 
+/* Primary CTA button (already in use) */
 .hero-content .btn {
-  background-color: #4CAF50;
+  background-color: #ff6f61;
   border: none;
-  border-radius: 3px;
+  border-radius: 30px;
   color: white;
+  padding: 15px 30px;
+  font-size: 16px;
   cursor: pointer;
-  padding: 10px 20px;
   text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin: 0 5px; /* a little spacing */
 }
 
 .hero-content .btn:hover {
-  background-color: #45a049;
+  background-color: #e65a50;
 }
 
+/* NEW OR UPDATED: Secondary CTA Buttons (e.g., Login / Sign Up) */
+.hero-content .btn-secondary {
+  background-color: transparent;
+  border: 2px solid #ff6f61;
+  color: #ff6f61;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin: 0 5px;
+}
+
+.hero-content .btn-secondary:hover {
+  background-color: #ff6f61;
+  color: #fff;
+}
+
+/* Button group for hero (optional) */
+.hero-content .btn-group {
+  margin-top: 20px;
+}
+
+/* -------------------------------------------------------
+   Features Section
+-------------------------------------------------------- */
 .features {
-  padding: 50px 0;
+  padding: 60px 20px;
+  background-color: #fff;
   text-align: center;
 }
 
 .features h2 {
-  margin-bottom: 30px;
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: #4CAF50;
 }
 
 .feature-grid {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
   flex-wrap: wrap;
 }
 
 .feature {
-  background-color: #4CAF50;
-  border-radius: 5px;
-  color: white;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 250px;
   padding: 20px;
-  width: 200px;
-  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
 }
 
 .feature img {
   width: 100px;
   height: 100px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .feature h3 {
-  margin-top: 0;
+  font-size: 20px;
+  margin: 10px 0;
+  color: #333;
 }
 
+.feature p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* NEW OR UPDATED: Example icon styling if you want icons in .feature */
+.feature i {
+  font-size: 40px;
+  color: #4CAF50;
+  margin-bottom: 15px;
+}
+
+/* -------------------------------------------------------
+   Signup & Contact Containers
+-------------------------------------------------------- */
 .signup-container, .contact-container {
-  background-color: white;
+  background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px auto;
@@ -126,6 +211,9 @@ header nav ul li a.active {
   margin-bottom: 20px;
 }
 
+/* -------------------------------------------------------
+   Form Elements
+-------------------------------------------------------- */
 .form-group {
   margin-bottom: 15px;
   text-align: left;
@@ -137,41 +225,45 @@ header nav ul li a.active {
 }
 
 .form-group input, .form-group textarea {
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
   box-sizing: border-box;
-  padding: 10px;
-  width: 100%;
 }
 
+/* Buttons */
 .signup-btn, .contact-btn {
   background-color: #4CAF50;
   border: none;
   border-radius: 3px;
   color: white;
-  cursor: pointer;
   padding: 10px 20px;
-  text-align: center;
+  cursor: pointer;
   width: 100%;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .signup-btn:hover, .contact-btn:hover {
   background-color: #45a049;
 }
 
+/* -------------------------------------------------------
+   Footer
+-------------------------------------------------------- */
 footer {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 0;
+  padding: 15px 0;
   text-align: center;
-  position: fixed;
-  bottom: 0;
   width: 100%;
 }
 
 footer .social-links {
   list-style: none;
   padding: 0;
+  margin-top: 10px;
 }
 
 footer .social-links li {
@@ -182,4 +274,332 @@ footer .social-links li {
 footer .social-links li a {
   color: white;
   text-decoration: none;
+}
+
+.footer-nav {
+  margin-bottom: 10px;
+}
+
+.footer-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  text-decoration: none;
+  margin: 0 5px;
+  font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer-btn:hover {
+  background-color: white;
+  color: #4CAF50;
+}
+
+/* -------------------------------------------------------
+   Dashboard Container
+-------------------------------------------------------- */
+.dashboard-container {
+  display: flex;
+  margin: 50px auto;
+  max-width: 1000px;
+  gap: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+  flex: 0 0 200px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Stats & Activity Boxes */
+.stats, .activity {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+
+.stats h3, .activity h3 {
+  margin-top: 0;
+  color: #4CAF50;
+}
+
+.stats ul, .activity ul {
+  list-style: disc inside;
+  padding-left: 20px;
+}
+
+/* -------------------------------------------------------
+   Responsive Adjustments
+-------------------------------------------------------- */
+@media (max-width: 768px) {
+  .feature-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .dashboard-container {
+    flex-direction: column;
+    max-width: 90%;
+  }
+  .sidebar, .main-content {
+    width: 100%;
+  }
+}
+
+/* -------------------------------------------------------
+   Login Page Wrapper
+-------------------------------------------------------- */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* Adjust if you have a fixed header/footer */
+  padding: 40px 20px;
+  background-color: #f4f4f4;
+}
+
+.login-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 100%;
+  padding: 30px;
+  text-align: center;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+}
+
+.login-container p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+/* Form Groups (Login) */
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* Login Button */
+.login-btn {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px 20px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.login-btn:hover {
+  background-color: #45a049;
+}
+
+/* Contact Section */
+section.contact {
+  padding: 60px 20px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.contact-container {
+  background-color: #f9f9f9;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h2 {
+  font-size: 32px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+.contact-container p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Form Groups */
+.contact-container .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.contact-container .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.contact-container .form-group input,
+.contact-container .form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* Contact Button */
+.contact-btn {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px 20px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.contact-btn:hover {
+  background-color: #45a049;
+}
+
+/* How It Works Section */
+section.how-it-works {
+  padding: 60px 20px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.how-it-works-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.how-it-works-container h2 {
+  font-size: 32px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+.how-it-works-container p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.step {
+  flex: 1 1 200px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.step i {
+  font-size: 40px;
+  color: #4CAF50;
+  margin-bottom: 15px;
+}
+
+.step h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.step p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .steps {
+    flex-direction: column;
+    align-items: center;
+  }
 }
