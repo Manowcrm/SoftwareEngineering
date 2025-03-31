@@ -1,0 +1,72 @@
+//- profile.pug
+extends layout
+
+block content
+  main
+    .profile-container
+      h2 Profile Information
+      form(id="profileForm", action="/profile_update", method="POST")
+        //- Name Field
+        .profile-field
+          label(for="name") Name:
+          span#nameDisplay #{user.name}
+          button.edit-btn(type="button", onclick="editField('name')") Edit
+          input(type="text", id="nameInput", name="name", value="#{user.name}", style="display:none;")
+          button.save-btn(type="button", id="nameSave", style="display:none;", onclick="saveField('name')") Save
+
+        //- Email Field
+        .profile-field
+          label(for="email") Email:
+          span#emailDisplay #{user.email}
+          button.edit-btn(type="button", onclick="editField('email')") Edit
+          input(type="email", id="emailInput", name="email", value="#{user.email}", style="display:none;")
+          button.save-btn(type="button", id="emailSave", style="display:none;", onclick="saveField('email')") Save
+
+        //- Password Field (display masked)
+        .profile-field
+          label(for="password") Password:
+          span#passwordDisplay ****** 
+          button.edit-btn(type="button", onclick="editField('password')") Edit
+          input(type="password", id="passwordInput", name="password", placeholder="Enter new password", style="display:none;")
+          button.save-btn(type="button", id="passwordSave", style="display:none;", onclick="saveField('password')") Save
+
+        //- Interests Field
+        .profile-field
+          label(for="interests") Interests:
+          span#interestsDisplay #{user.interests}
+          button.edit-btn(type="button", onclick="editField('interests')") Edit
+          input(type="text", id="interestsInput", name="interests", value="#{user.interests}", style="display:none;")
+          button.save-btn(type="button", id="interestsSave", style="display:none;", onclick="saveField('interests')") Save
+
+        //- Global Update Button (optional if you want to submit all changes at once)
+        button.update-btn(type="submit") Update Profile
+
+    // Client-side script to toggle edit mode
+    script.
+      function editField(field) {
+        // Hide the display span and its edit button
+        document.getElementById(field + 'Display').style.display = 'none';
+        var editBtns = document.querySelectorAll("button[onclick=\"editField('" + field + "')\"]");
+        editBtns.forEach(function(btn) { btn.style.display = 'none'; });
+        // Show the input field and save button
+        document.getElementById(field + 'Input').style.display = 'inline-block';
+        document.getElementById(field + 'Save').style.display = 'inline-block';
+      }
+      
+      function saveField(field) {
+        var input = document.getElementById(field + 'Input');
+        var display = document.getElementById(field + 'Display');
+        // Update the display text with the new value
+        if(field === 'password') {
+          // For security, display masked password after update
+          display.textContent = "******";
+        } else {
+          display.textContent = input.value;
+        }
+        // Hide the input field and save button, show display and edit button
+        input.style.display = 'none';
+        document.getElementById(field + 'Save').style.display = 'none';
+        display.style.display = 'inline';
+        var editBtns = document.querySelectorAll("button[onclick=\"editField('" + field + "')\"]");
+        editBtns.forEach(function(btn) { btn.style.display = 'inline-block'; });
+      }

@@ -1,0 +1,66 @@
+extends layout
+
+block content
+  main
+    section.find-buddy#find-buddy
+      h2 Find Your Buddy
+      p Select a module below to find study partners with similar interests.
+      form#moduleForm
+        select#moduleSelect(name="module")
+          option(value="Math") Math
+          option(value="Science") Science
+          option(value="Literature") Literature
+          // You can add more module options as needed.
+        button(type="submit") Search
+      .buddy-results
+        ul#buddyList
+          // Buddy list items will be appended here dynamically.
+
+  // Client-side JavaScript for fetching buddy list and adding buddies
+  script.
+    document.getElementById("moduleForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var module = document.getElementById("moduleSelect").value;
+      fetch("/find_buddy/" + module)
+        .then(function(response) { return response.json(); })
+        .then(function(buddies) {
+          var buddyList = document.getElementById("buddyList");
+          buddyList.innerHTML = "";
+          buddies.forEach(function(buddy) {
+            var li = document.createElement("li");
+            li.textContent = buddy.name + " (" + buddy.email + ")";
+            
+            var addButton = document.createElement("button");
+            addButton.textContent = "Add Buddy";
+            addButton.style.marginLeft = "10px";
+            addButton.addEventListener("click", function() {
+              fetch("/add_buddy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                  currentUserId: #{user.id}, 
+                  buddyId: buddy.id 
+                })
+              })
+              .then(function(response) { return response.json(); })
+              .then(function(result) {
+                if(result.success) {
+                  alert("Buddy added successfully!");
+                } else {
+                  alert("Error adding buddy: " + result.error);
+                }
+              })
+              .catch(function(err) {
+                console.error("Error adding buddy:", err);
+                alert("Error adding buddy");
+              });
+            });
+            li.appendChild(addButton);
+            buddyList.appendChild(li);
+          });
+        })
+        .catch(function(error) {
+          console.error("Error fetching buddy list:", error);
+          alert("Error fetching buddy list");
+        });
+    });

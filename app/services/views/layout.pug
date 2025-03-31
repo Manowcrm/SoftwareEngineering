@@ -12,11 +12,20 @@ html(lang="en")
       .logo Study Buddies
       nav
         ul
-          li: a(href="/") Home
-          li: a(href="/how_it_works") How It Works
-          li: a(href="/contact") Contact
-          li: a(href="/login") Log In
-          li: a(href="/signup") Sign Up
+          if user
+            li: a(href="/profile") Profile
+            li: a(href="/settings") Settings
+            li: a(href="/chats") Chats
+            li: a(href="/dashboard") Dashboard
+            li: a(href="/find_buddy") Find Your Buddy
+            li: a(href="/activity") Activity
+            li: a(href="/logout") Logout
+          else
+            li: a(href="/") Home
+            li: a(href="/how_it_works") How It Works
+            li: a(href="/contact") Contact
+            li: a(href="/login") Log In
+            li: a(href="/signup") Sign Up
     block content
     footer
       .footer-nav

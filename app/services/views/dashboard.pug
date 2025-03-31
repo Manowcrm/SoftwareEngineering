@@ -1,27 +1,193 @@
+//- dashboard.pug
 extends layout
 
 block content
-  .dashboard-container
-    .sidebar
-      ul
-        li: a(href="/profile") Profile
-        li: a(href="/settings") Settings
-        li: a(href="/activity") Activity
-        li: a(href="/logout") Logout
-    .main-content
-      h2 Welcome back, #{name}!
-      p We're glad to see you here.
-      
-      .stats
-        h3 Your Dashboard Stats
+  main
+    .dashboard-container
+      // Sidebar Navigation
+      .sidebar
         ul
-          li Total Posts: 10
-          li Messages: 5
-          li Notifications: 3
-      
-      .activity
-        h3 Recent Activity
-        ul
-          li You logged in 10 minutes ago.
-          li You updated your profile.
-          li You received a new message.
+          li: a(href="/profile")
+            i.fas.fa-user
+            |  Profile
+          li: a(href="/settings")
+            i.fas.fa-cog
+            |  Settings
+          li: a(href="/activity")
+            i.fas.fa-chart-line
+            |  Activity
+          li: a(href="/logout")
+            i.fas.fa-sign-out-alt
+            |  Logout
+
+      // Main Content Area
+      .main-content
+        h2 Welcome back, #{user.name}!
+        p Here’s an overview of your account.
+        
+        // Dashboard Stats
+        .stats
+          h3 Dashboard Stats
+          ul
+            li Total Posts: 10
+            li Messages: 5
+            li Notifications: 3
+
+        // Messaging Section
+        .messaging
+          h3 Chats
+          // Buddy Contacts Section (shows added buddies)
+          .buddy-contacts
+            h4 Your Buddies
+            ul#buddyContacts
+              // Buddy contacts will be appended here dynamically
+          // Display selected chat buddy
+          h4#chatHeader Select a buddy to start chatting
+          // Chat window
+          .chat-window
+            ul#messages
+              // Chat messages will be appended here
+          // Chat input
+          form#chat-form
+            input(type="text", id="msg", placeholder="Type your message...", autocomplete="off")
+            button(type="submit") Send
+
+        // Find Your Buddy Section
+        .find-buddy
+          h3 Find Your Buddy
+          p Search for study buddies by selecting a module.
+          form#findBuddyForm
+            select#buddyModule(name="module")
+              option(value="Math") Math
+              option(value="Science") Science
+              option(value="Literature") Literature
+              //- Add more options as needed.
+            button(type="submit") Search
+          ul#buddyResults
+            // Buddy search results will be appended here dynamically
+
+        // Recent Activity Section
+        .recent-activity
+          h3 Recent Activity
+          ul
+            li Logged in 10 minutes ago.
+            li Updated profile information.
+            li Received a new message.
+
+  // Include Socket.io and client scripts
+  script(src="/socket.io/socket.io.js")
+  script.
+    // Global variable to store the currently selected buddy
+    var currentChatBuddy = null;
+
+    // Function to fetch buddy contacts and render them in the buddy list
+    function fetchBuddyContacts() {
+      fetch("/get_buddies")
+        .then(function(response) { return response.json(); })
+        .then(function(buddies) {
+          var buddyContacts = document.getElementById("buddyContacts");
+          buddyContacts.innerHTML = "";
+          buddies.forEach(function(buddy) {
+            var li = document.createElement("li");
+            li.textContent = buddy.name + " (" + buddy.email + ")";
+            li.style.cursor = "pointer";
+            // Add click event to select a buddy for messaging
+            li.addEventListener("click", function() {
+              currentChatBuddy = buddy;
+              // Update chat header to show selected buddy
+              document.getElementById("chatHeader").textContent = "Chatting with " + buddy.name;
+              // Optionally clear the chat window when switching conversations
+              document.getElementById("messages").innerHTML = "";
+              // Highlight the selected buddy
+              var allBuddyItems = document.querySelectorAll("#buddyContacts li");
+              allBuddyItems.forEach(function(item) {
+                item.classList.remove("active");
+              });
+              li.classList.add("active");
+            });
+            buddyContacts.appendChild(li);
+          });
+        })
+        .catch(function(error) {
+          console.error("Error fetching buddy contacts:", error);
+        });
+    }
+
+    // Initially fetch buddy contacts on dashboard load
+    fetchBuddyContacts();
+
+    // Initialize Socket.io for messaging
+    var socket = io();
+    socket.on('chatMessage', function(data) {
+      // Assuming data has properties: from, to, message
+      var li = document.createElement("li");
+      li.textContent = data.from + " to " + data.to + ": " + data.message;
+      document.getElementById("messages").appendChild(li);
+    });
+
+    // Modify chat message sending code to include the selected buddy
+    document.getElementById("chat-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var msgInput = document.getElementById("msg");
+      var message = msgInput.value;
+      if (message.trim() !== "" && currentChatBuddy) {
+        // Build a message object that includes sender and recipient information
+        var messageData = {
+          message: message,
+          to: currentChatBuddy.id,
+          from: #{user.id} // Pug interpolation to insert current user ID
+        };
+        socket.emit("chatMessage", messageData);
+        msgInput.value = "";
+      } else if (!currentChatBuddy) {
+        alert("Please select a buddy to chat with.");
+      }
+    });
+
+    // Find Buddy functionality remains as before
+    document.getElementById("findBuddyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var module = document.getElementById("buddyModule").value;
+      fetch("/find_buddy/" + module)
+        .then(function(response) { return response.json(); })
+        .then(function(buddies) {
+          var buddyList = document.getElementById("buddyResults");
+          buddyList.innerHTML = "";
+          buddies.forEach(function(buddy) {
+            var li = document.createElement("li");
+            li.textContent = buddy.name + " (" + buddy.email + ")";
+            
+            var addButton = document.createElement("button");
+            addButton.textContent = "Add Buddy";
+            addButton.style.marginLeft = "10px";
+            addButton.addEventListener("click", function() {
+              fetch("/add_buddy", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                // Insert current user's ID using Pug interpolation
+                body: JSON.stringify({ currentUserId: #{user.id}, buddyId: buddy.id })
+              })
+              .then(function(response) { return response.json(); })
+              .then(function(result) {
+                if(result.success) {
+                  alert("Buddy added successfully!");
+                  // Re-fetch buddy contacts to update the list
+                  fetchBuddyContacts();
+                } else {
+                  alert("Error adding buddy: " + result.error);
+                }
+              })
+              .catch(function(err) {
+                console.error("Error adding buddy:", err);
+                alert("Error adding buddy");
+              });
+            });
+            li.appendChild(addButton);
+            buddyList.appendChild(li);
+          });
+        })
+        .catch(function(error) {
+          console.error("Error fetching buddy list:", error);
+          alert("Error fetching buddy list");
+        });
+    });
