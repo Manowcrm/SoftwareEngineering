@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 Activity Page
+
+  // Existing sections (Friend Requests, Unread Messages, etc.)
+  ...
+
+  // Add the Coordinate Study Times section
+  h2 Coordinate Study Times
+  button(onclick="window.location.href='/auth/google'") Authenticate with Google
+  form(action="/create_event" method="POST")
+    button(type="submit") Create Study Event

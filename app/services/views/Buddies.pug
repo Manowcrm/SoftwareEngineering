@@ -1,0 +1,100 @@
+extends layout
+
+block content
+  h1 Your Buddies
+
+  ul#buddyList
+    // Buddy list will be dynamically populated here
+
+  script.
+    // Fetch and display the buddy list
+    function fetchBuddies() {
+      fetch("/get_buddies")
+        .then(function(response) { return response.json(); })
+        .then(function(buddies) {
+          var buddyList = document.getElementById("buddyList");
+          buddyList.innerHTML = ""; // Clear the existing list
+          buddies.forEach(function(buddy) {
+            var li = document.createElement("li");
+            li.textContent = buddy.name + " (" + buddy.email + ")";
+            
+            // Add rating functionality
+            var ratingForm = document.createElement("form");
+            ratingForm.action = "/rate_buddy";
+            ratingForm.method = "POST";
+
+            var hiddenInput = document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = "buddyId";
+            hiddenInput.value = buddy.buddyId;
+
+            var label = document.createElement("label");
+            label.textContent = "Rate: ";
+
+            var select = document.createElement("select");
+            select.name = "rating";
+            for (var i = 1; i <= 5; i++) {
+              var option = document.createElement("option");
+              option.value = i;
+              option.textContent = i;
+              if (buddy.rating && buddy.rating == i) {
+                option.selected = true;
+              }
+              select.appendChild(option);
+            }
+
+            var submitButton = document.createElement("button");
+            submitButton.type = "submit";
+            submitButton.textContent = "Submit";
+
+            ratingForm.appendChild(hiddenInput);
+            ratingForm.appendChild(label);
+            ratingForm.appendChild(select);
+            ratingForm.appendChild(submitButton);
+
+            li.appendChild(ratingForm);
+            buddyList.appendChild(li);
+          });
+
+          // Attach event listeners to the rating forms
+          attachRatingListeners();
+        })
+        .catch(function(error) {
+          console.error("Error fetching buddies:", error);
+        });
+    }
+
+    // Attach event listeners to the rating forms
+    function attachRatingListeners() {
+      document.querySelectorAll('form[action="/rate_buddy"]').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const formData = new FormData(form);
+          const buddyId = formData.get('buddyId');
+          const rating = formData.get('rating');
+
+          console.log("Submitting rating for Buddy ID:", buddyId); // Debugging log
+          console.log("Rating value:", rating); // Debugging log
+
+          try {
+            const response = await fetch('/rate_buddy', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ buddyId, rating })
+            });
+            const result = await response.json();
+            if (response.ok) {
+              alert(result.message);
+              location.reload(); // Reload the page to update the rating
+            } else {
+              alert(result.error || 'Failed to rate buddy.');
+            }
+          } catch (error) {
+            console.error('Error rating buddy:', error);
+          }
+        });
+      });
+    }
+
+    // Fetch buddies when the page loads
+    fetchBuddies();

@@ -1,4 +1,3 @@
-//- chats.pug
 extends layout
 
 block content
@@ -12,13 +11,10 @@ block content
 
       // Main Chat Area
       .chat-main
-        // Chat header to display selected conversation
         h3#chatHeader Select a conversation
-        // Chat window for conversation messages
         .chat-window
           ul#chatMessages
             // Chat messages will be appended here dynamically
-        // Message input form
         form#chatForm
           input(type="text", id="chatInput", placeholder="Type a message...", autocomplete="off")
           button(type="submit") Send
@@ -26,45 +22,20 @@ block content
   // Include Socket.io script
   script(src="/socket.io/socket.io.js")
   script.
-    // Initialize Socket.io
     var socket = io();
-    // Global variable for the currently selected buddy
     var currentChatBuddy = null;
 
-    // Fetch and render chat buddies
-    function fetchChatBuddies() {
-      fetch("/get_buddies")
-        .then(function(response) { return response.json(); })
-        .then(function(buddies) {
-          var buddyList = document.getElementById("chatBuddyList");
-          buddyList.innerHTML = "";
-          buddies.forEach(function(buddy) {
-            var li = document.createElement("li");
-            li.textContent = buddy.name;
-            li.style.cursor = "pointer";
-            // When a buddy is clicked, set them as the current conversation
-            li.addEventListener("click", function() {
-              currentChatBuddy = buddy;
-              document.getElementById("chatHeader").textContent = "Chatting with " + buddy.name;
-              // Clear previous messages when switching conversations
-              document.getElementById("chatMessages").innerHTML = "";
-            });
-            buddyList.appendChild(li);
-          });
-        })
-        .catch(function(err) { console.error("Error fetching chat buddies:", err); });
-    }
-
-    // Initial fetch of chat buddies
-    fetchChatBuddies();
+    // Register the current user with the server
+    socket.emit("registerUser", !{user.id});
 
     // Listen for incoming chat messages
-    socket.on("chatMessage", function(data) {
-      // Check if the message belongs to the current conversation
-      // data is expected to have properties: from, to, message
-      if (currentChatBuddy && ((data.from === currentChatBuddy.id) || (data.from === #{user.id}))) {
+    socket.on("chatMessage", function (data) {
+      if (
+        currentChatBuddy &&
+        (data.from === currentChatBuddy.id || data.to === currentChatBuddy.id)
+      ) {
         var li = document.createElement("li");
-        if (data.from === #{user.id}) {
+        if (data.from === !{user.id}) {
           li.textContent = "Me: " + data.message;
         } else {
           li.textContent = currentChatBuddy.name + ": " + data.message;
@@ -73,21 +44,71 @@ block content
       }
     });
 
+    // Fetch and render chat buddies
+    function fetchChatBuddies() {
+      fetch("/get_buddies")
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (buddies) {
+          var buddyList = document.getElementById("chatBuddyList");
+          buddyList.innerHTML = ""; // Clear the list to avoid duplicate listeners
+          buddies.forEach(function (buddy) {
+            var li = document.createElement("li");
+            li.textContent = buddy.name;
+            li.style.cursor = "pointer";
+            li.addEventListener("click", function () {
+              currentChatBuddy = buddy;
+              document.getElementById("chatHeader").textContent =
+                "Chatting with " + buddy.name;
+
+              fetch(`/get_messages/${buddy.id}`)
+                .then((response) => response.json())
+                .then((messages) => {
+                  const chatMessages = document.getElementById("chatMessages");
+                  chatMessages.innerHTML = ""; // Clear previous messages
+                  messages.forEach((msg) => {
+                    const li = document.createElement("li");
+                    if (msg.sender_id === !{user.id}) {
+                      li.textContent = "Me: " + msg.message;
+                    } else {
+                      li.textContent = buddy.name + ": " + msg.message;
+                    }
+                    chatMessages.appendChild(li);
+                  });
+                })
+                .catch((err) => console.error("Error fetching messages:", err));
+            });
+            buddyList.appendChild(li);
+          });
+        })
+        .catch(function (err) {
+          console.error("Error fetching chat buddies:", err);
+        });
+    }
+
+    // Initial fetch of chat buddies
+    fetchChatBuddies();
+
     // Handle sending a message
-    document.getElementById("chatForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      var input = document.getElementById("chatInput");
-      var message = input.value;
-      if (message.trim() !== "" && currentChatBuddy) {
-        // Build the message object to include sender and recipient IDs
-        var msgData = {
-          message: message,
-          from: #{user.id},      // Pug interpolation for current user ID
-          to: currentChatBuddy.id
-        };
-        socket.emit("chatMessage", msgData);
-        input.value = "";
-      } else if (!currentChatBuddy) {
-        alert("Please select a chat buddy from the list.");
-      }
-    });
+    document
+      .getElementById("chatForm")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        var input = document.getElementById("chatInput");
+        var message = input.value;
+        if (message.trim() !== "" && currentChatBuddy) {
+          var msgData = {
+            message: message,
+            from: !{user.id},
+            to: currentChatBuddy.id,
+          };
+          socket.emit("chatMessage", msgData);
+          var li = document.createElement("li");
+          li.textContent = "Me: " + message;
+          document.getElementById("chatMessages").appendChild(li);
+          input.value = "";
+        } else if (!currentChatBuddy) {
+          alert("Please select a chat buddy from the list.");
+        }
+      });
