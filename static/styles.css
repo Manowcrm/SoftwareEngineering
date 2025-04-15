@@ -276,6 +276,11 @@ footer .social-links li a {
   text-decoration: none;
 }
 
+<<<<<<< HEAD
+.error-message {
+  color: red;
+  margin-bottom: 20px;
+=======
 .footer-nav {
   margin-bottom: 10px;
 }
@@ -1024,4 +1029,5 @@ hr {
 
 .delete-btn:hover {
   background-color: #c0392b;
+>>>>>>> 5dc4f67afeff1abb3d526dc899900dd96700434b
 }
