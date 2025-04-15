@@ -1,0 +1,32 @@
+//- settings.pug
+extends layout
+
+block content
+  main
+    .settings-container
+      h2 Account Settings
+      form(action="/settings_update" method="POST")
+        .form-group
+          label(for="emailNotifications") Email Notifications:
+          select#emailNotifications(name="emailNotifications")
+            option(value="enabled" selected=(user.emailNotifications==='enabled')) Enabled
+            option(value="disabled" selected=(user.emailNotifications==='disabled')) Disabled
+        .form-group
+          label(for="theme") Theme:
+          select#theme(name="theme")
+            option(value="light" selected=(user.theme==='light')) Light
+            option(value="dark" selected=(user.theme==='dark')) Dark
+        .form-group
+          label(for="privacy") Profile Privacy:
+          select#privacy(name="privacy")
+            option(value="public" selected=(user.privacy==='public')) Public
+            option(value="private" selected=(user.privacy==='private')) Private
+        button(type="submit") Update Settings
+
+      hr
+
+      //- Danger Zone for Account Deletion
+      h3 Danger Zone
+      p Warning: Deleting your account is irreversible.
+      form(action="/delete_account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.')")
+        button.delete-btn(type="submit") Delete Account

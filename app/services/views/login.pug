@@ -1,8 +1,7 @@
 extends layout
 
 block content
-  // Login Section
-  section#login
+  section.login-page
     .login-container
       h2 Log In
       p Please enter your credentials to log in.
@@ -10,11 +9,13 @@ block content
         .error-message #{error}
       form(action="/login_process", method="POST")
         .form-group
-          label(for="email") Email:
+          label(for="email") Email
           input(type="email", id="email", name="email", placeholder="Your Email", required)
         .form-group
-          label(for="password") Password:
+          label(for="password") Password
           input(type="password", id="password", name="password", placeholder="Your Password", required)
-        button(type="submit", class="login-btn") Log In
-      p Don't have an account? 
+        button.login-btn(type="submit") Log In
+
+      p
+        | Don't have an account? 
         a(href="/signup") Sign Up
